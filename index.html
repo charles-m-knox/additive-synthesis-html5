@@ -1,0 +1,208 @@
+<!doctype html>
+<meta charset="UTF-8"/>
+<html>
+<body>
+	<center>
+		<canvas id="myCanvas" width=500 height=500 style="border: 1px solid black">
+
+		</canvas>
+		<p>
+			<button type ="button" onclick="setWaveType('sawtooth');">Sawtooth</button>
+			<button type ="button" onclick="setWaveType('square');">Square</button>
+			<br/>
+		</p>
+		<p>
+			k:
+			<button type = "button" onclick="decrementK();">-</button>
+			<span id="kValueReading"> 3 </span>
+			<button type = "button" onclick="incrementK();">+</button>
+			<button type = "button" onclick="resetK();">Reset</button>
+
+		</p>
+			Frequency (Hz):
+			<button type = "button" onclick="f=20;">20</button>
+			<button type = "button" onclick="f=40;">40</button>
+			<button type = "button" onclick="f=80;">80</button>			
+			<button type = "button" onclick="f=100;">100</button>
+			<button type = "button" onclick="f=440;">440</button>
+			<button type = "button" onclick="f=520;">520</button>
+			<br/>
+		</p>
+		<br/>
+		<p>
+			<font color="#888888">
+				Additive Synthesis from scratch using <a href="https://en.wikipedia.org/wiki/Fourier_series">Fourier Series</a>
+				<br/>
+				Created in 4 hours for the Intel Hackathon 2014
+				<br>
+				There couldn't be only one competitor in Chandler!
+				<br>
+				by Charles Knox: <a href="mailto:charles.knox@intel.com">charles.knox@intel.com</a>
+				<br>
+			</font>
+		</p>
+	</center>
+	<script>
+		var can = document.getElementById("myCanvas");
+		var context = can.getContext("2d");
+		var wave = can.getContext("2d");
+		var timeOffset = 0;
+		var type = "sawtooth";
+		var f = 20;				//frequency of waves in Hz
+		var a = 250;			//amplitude of waves
+		var k = 3;				//wave number for Fourier series
+
+		drawGrid();
+
+		setInterval("timeDraw();", 40);
+
+		function incrementK()
+		{
+			k++;
+			var kSpan = document.getElementById("kValueReading");
+			kSpan.innerHTML = " " + k + " ";
+		}
+
+		function decrementK()
+		{
+			if ( k > 0)
+				k--;
+			var kSpan = document.getElementById("kValueReading");
+			kSpan.innerHTML = " " + k + " ";
+		}
+
+		function resetK()
+		{
+			k = 3;
+			var kSpan = document.getElementById("kValueReading");
+			kSpan.innerHTML = " " + k + " ";
+		}
+
+		
+		function setWaveType(waveType)
+		{
+			type = waveType;
+		}
+
+		function updateK()
+		{
+			var kInputField = document.getElementById("kInput");
+			//var kk = kInputField.value;
+			if (!isNaN(kInputField.value))
+				if (kInputField.value >= 1)
+					k = kInputField.value;
+		}
+
+		function timeDraw()
+		{
+			if (timeOffset > 2000)
+			{
+				timeOffset = 0;
+			}
+			timeOffset += 0.5;
+			draw();
+		} 
+
+		function clearAll()
+		{
+			can.width = can.width;
+			drawGrid();
+		}
+		function draw()
+		{
+			clearAll();
+			//Initialize the wave
+			wave.beginPath();
+			wave.moveTo(0, 250.5);
+
+			switch (type)
+			{
+				case "sawtooth":
+					//Do the fourier thing
+					//kk is the wavenumber
+					//y(x) = A/2 - A/pi * (rightHandSum)
+					var rightHandSum = 0;
+					for (var x = 0; x < 500 + timeOffset * 2 ; x += 0.1)
+					{
+						for (var kk = 1; kk <= k; kk++)
+						{
+							rightHandSum += Math.sin(2 * 3.141 * kk * f * x) / kk;
+						}
+						var y = (250 - a/2) + a/2 - (a / (3.141)) * rightHandSum;
+						wave.lineTo(x - timeOffset * 2, y);
+						rightHandSum = 0;
+					}
+					break;
+				case "square":
+					//Do the slightly different fourier thing
+					//kk is the wavenumber
+					//y(x) = (4/pi) * rightHandSum
+					var rightHandSum = 0;
+					for (var x = 0; x < 500 + timeOffset * 2 ; x += 0.1)
+					{
+						for (var kk = 1; kk <= k; kk++)
+						{
+							rightHandSum += Math.sin(2 * 3.141 * (2 * kk - 1) * f * x) / (2 * kk - 1) ;
+						}
+						var y = (250 - a/2) + a/2 - (a / (3.141)) * rightHandSum;
+						wave.lineTo(x - timeOffset * 2, y);
+						rightHandSum = 0;
+					}					
+					break;
+				case "triangle":
+					//DOES NOT WORK PROPERLY
+					//Do the slightly different fourier thing
+					//kk is the wavenumber
+					//y(x) = (8/pi^2) * rightHandSum
+					var rightHandSum = 0;
+					for (var x = 0; x < 500 + timeOffset * 2 ; x += 0.1)
+					{
+						for (var kk = 1; kk <= k; kk++)
+						{
+							var i = Math.pow(-1, kk);
+
+							rightHandSum +=  Math.sin((2 * kk + 1) * f * x) / ((2 * kk + 1) * (2 * kk + 1)) ;
+						}
+						var y = (250 - a/2) + (8/(3.141 * 3.141)) * rightHandSum;
+						wave.lineTo(x - timeOffset * 2, y);
+						rightHandSum = 0;
+					}					
+					break;
+			}
+			wave.strokeStyle = "#FF0000";
+			wave.stroke();
+		}
+		
+
+
+		function drawGrid()
+		{
+
+			for (var x = 0.5; x < 500; x += 10)
+			{
+				context.moveTo(x, 0);
+				context.lineTo(x, 500);
+			}
+
+			for (var y = 0.5; y < 500; y += 10)
+			{
+				context.moveTo(0,y);
+				context.lineTo(500, y);
+			}
+			context.strokeStyle = "#eee";
+			context.stroke();
+			
+			//x, y lines
+			context.beginPath();
+			context.moveTo(250.5, 0);
+			context.lineTo(250.5, 500);
+
+			context.moveTo(0, 250.5);
+			context.lineTo(500, 250.5);
+			//context.moveTo(250.)
+			context.strokeStyle = "#000";
+			context.stroke();
+		}
+		</script>
+	</body>
+	</html>

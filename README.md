@@ -5,7 +5,7 @@ Does additive synthesis via Fourier Series. Created at the Intel 2014 Hackathon 
 
 Written in JavaScript and using HTML5 Canvas, we are able to use Joseph Fourier's Fourier Series to add a number of sinusoidal waveforms together in order to approximate a Square Wave or Sawtooth Wave.
 
-#Technical Explanation
+##Technical Explanation
 
 Fourier Series are important to physics. It is a branch of Fourier Analysis, which is useful in many ways, such as in signal processing:
 
@@ -21,47 +21,54 @@ Fourier Series are important to physics. It is a branch of Fourier Analysis, whi
 
 See Wikipedia articles on [Fourier Analysis](http://en.wikipedia.org/wiki/Fourier_analysis) and [Fourier Series](http://en.wikipedia.org/wiki/Fourier_series).
 
-#Sawtooth Wave
+##Sawtooth Wave
 
 The JavaScript/HTML5 code below is an implementation of the Fourier Series for a sawtooth wave:
 
-    case "sawtooth":
-                    //Do the fourier thing
-                    //kk is the wavenumber
-                    //y(x) = A/2 - A/pi * (rightHandSum)
-                    var rightHandSum = 0;
-                    for (var x = 0; x < 500 + timeOffset * 2 ; x += 0.1)
+```javascript
+case "sawtooth":
+                //Do the fourier thing
+                //kk is the wavenumber
+                //y(x) = A/2 - A/pi * (rightHandSum)
+                var rightHandSum = 0;
+                for (var x = 0; x < 500 + timeOffset * 2 ; x += 0.1)
+                {
+                    for (var kk = 1; kk <= k; kk++)
                     {
-                        for (var kk = 1; kk <= k; kk++)
-                        {
-                            rightHandSum += Math.sin(2 * 3.141 * kk * f * x) / kk;
-                        }
-                        var y = (250 - a/2) + a/2 - (a / (3.141)) * rightHandSum;
-                        wave.lineTo(x - timeOffset * 2, y);
-                        rightHandSum = 0;
+                        rightHandSum += Math.sin(2 * 3.141 * kk * f * x) / kk;
                     }
-                    break;
+                    var y = (250 - a/2) + a/2 - (a / (3.141)) * rightHandSum;
+                    wave.lineTo(x - timeOffset * 2, y);
+                    rightHandSum = 0;
+                }
+                break;
+```
 
+You can see that this is an implementation of the equation
 
 ![Sawtooth Equation](https://raw.githubusercontent.com/chuck-knox/additive-synthesis-html5/master/sawtooth_eqn_wikipedia.png "Sawtooth Equation")
 
-#Square Wave
+##Square Wave
 
-    case "square":
-                    //Do the slightly different fourier thing
-                    //kk is the wavenumber
-                    //y(x) = (4/pi) * rightHandSum
-                    var rightHandSum = 0;
-                    for (var x = 0; x < 500 + timeOffset * 2 ; x += 0.1)
+```javascript
+case "square":
+                //Do the slightly different fourier thing
+                //kk is the wavenumber
+                //y(x) = (4/pi) * rightHandSum
+                var rightHandSum = 0;
+                for (var x = 0; x < 500 + timeOffset * 2 ; x += 0.1)
+                {
+                    for (var kk = 1; kk <= k; kk++)
                     {
-                        for (var kk = 1; kk <= k; kk++)
-                        {
-                            rightHandSum += Math.sin(2 * 3.141 * (2 * kk - 1) * f * x) / (2 * kk - 1) ;
-                        }
-                        var y = (250 - a/2) + a/2 - (a / (3.141)) * rightHandSum;
-                        wave.lineTo(x - timeOffset * 2, y);
-                        rightHandSum = 0;
-                    }                   
-                    break;
+                        rightHandSum += Math.sin(2 * 3.141 * (2 * kk - 1) * f * x) / (2 * kk - 1) ;
+                    }
+                    var y = (250 - a/2) + a/2 - (a / (3.141)) * rightHandSum;
+                    wave.lineTo(x - timeOffset * 2, y);
+                    rightHandSum = 0;
+                }                   
+                break;
+```
+
+You can see that this is an implementation of the equation
 
 ![Square Equation](https://raw.githubusercontent.com/chuck-knox/additive-synthesis-html5/master/square_eqn_wikipedia.png "Square Equation")

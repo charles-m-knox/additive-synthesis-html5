@@ -13,19 +13,19 @@
 		</p>
 		<p>
 			k:
-			<button type = "button" onclick="decrementK();">-</button>
+			<button type ="button" onclick="decrementK();">-</button>
 			<span id="kValueReading"> 3 </span>
-			<button type = "button" onclick="incrementK();">+</button>
-			<button type = "button" onclick="resetK();">Reset</button>
+			<button type ="button" onclick="incrementK();">+</button>
+			<button type ="button" onclick="resetK();">Reset</button>
 
 		</p>
 			Frequency (Hz):
-			<button type = "button" onclick="f=20;">20</button>
-			<button type = "button" onclick="f=40;">40</button>
-			<button type = "button" onclick="f=80;">80</button>			
-			<button type = "button" onclick="f=100;">100</button>
-			<button type = "button" onclick="f=440;">440</button>
-			<button type = "button" onclick="f=520;">520</button>
+			<button type ="button" onclick="f=20;">20</button>
+			<button type ="button" onclick="f=40;">40</button>
+			<button type ="button" onclick="f=80;">80</button>			
+			<button type ="button" onclick="f=100;">100</button>
+			<button type ="button" onclick="f=440;">440</button>
+			<button type ="button" onclick="f=520;">520</button>
 			<br/>
 		</p>
 		<br/>
@@ -34,11 +34,13 @@
 				Additive Synthesis from scratch using <a href="https://en.wikipedia.org/wiki/Fourier_series">Fourier Series</a>
 				<br/>
 				Created in 4 hours for the Intel Hackathon 2014
-				<br>
+				<br/>
 				There couldn't be only one competitor in Chandler!
-				<br>
+				<br/>
 				by Charles Knox: <a href="mailto:charles.knox@intel.com">charles.knox@intel.com</a>
-				<br>
+				<br/>
+				<a href="https://github.com/chuck-knox/additive-synthesis-html5">GitHub</a>
+				<br/>
 			</font>
 		</p>
 	</center>
@@ -49,7 +51,7 @@
 		var timeOffset = 0;
 		var type = "sawtooth";
 		var f = 20;				//frequency of waves in Hz
-		var a = 250;			//amplitude of waves
+		var a = 250;				//amplitude of waves
 		var k = 3;				//wave number for Fourier series
 
 		drawGrid();

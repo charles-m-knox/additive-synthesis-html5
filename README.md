@@ -1,7 +1,7 @@
 additive-synthesis-html5
 ========================
 
-Does additive synthesis via Fourier Series. Created at the Intel 2014 Hackathon in 4 hrs in Chandler AZ.
+Does graphical additive synthesis via Fourier Series. Created at the Intel 2014 Hackathon in 4 hrs in Chandler AZ.
 
 Written in JavaScript and using HTML5 Canvas, we are able to use Joseph Fourier's Fourier Series to add a number of sinusoidal waveforms together in order to approximate a Square Wave or Sawtooth Wave.
 
